@@ -6,18 +6,21 @@ import HeadSVG from '../HeadSVG/HeadSVG';
 import { Context } from '../context/context';
 
 function Canvas() {
-    const {isHead, isBody, headXY , setHeadXY} = useContext(Context);
+    const { isHead, isBody, headXY, setHeadXY } = useContext(Context);
 
 
     return (
-        <div style={
-            {
-                border: 'solid 2px green',
-                position: 'absolute'
-            }}>
-            {isHead && <HeadSVG/>}
-            {isBody && <BodySVG isBody={isBody} headLineXY={headXY} />}
-        </div>
+            <div style={
+                {
+                    border: 'solid 5px green',
+                    position: 'absolute',
+                    width: '100vw',
+                    height: '100vh'
+                    // transform: 'translate(500px,500px)'
+                }}>
+                {isHead && <HeadSVG />}
+                {isBody && <BodySVG />}
+            </div>
     )
 }
 

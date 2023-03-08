@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import logo from './logo.svg';
 import './App.css';
 import Canvas from './components/Canvas/Canvas';
-import { svgObj } from './components/svg/svgLib';
+import { svgObj } from './components/svg/headLib';
 import { ContextProvider } from './components/context/context';
 
 
@@ -13,21 +13,27 @@ function App() {
   const [bodyXY, setBodyXY] = useState(null);
 
   function handleOnHeadClick(e) {
-    setIsHead(true);
+    setIsHead(e.target.innerText);
   }
 
   function handleOnBodyClick(e) {
-    setIsBody(true);
+    setIsBody(e.target.innerText);
   }
 
   return (
-    <ContextProvider value={{isHead, isBody, headXY , setHeadXY , bodyXY, setBodyXY}}>
+    <ContextProvider value={{ isHead, isBody, headXY, setHeadXY, bodyXY, setBodyXY }}>
       <div className="App">
-        <div>
-          <button onClick={handleOnHeadClick}>Head</button>
-          <button onClick={handleOnBodyClick}>Body</button>
+        <div className='d-flex justify-content-between'>
+          <div>
+            <button onClick={handleOnHeadClick}>sheepHead</button>
+            <button onClick={handleOnHeadClick}>foxHead</button>
+          </div>
+          <div>
+            <button onClick={handleOnBodyClick}>sheepBody</button>
+            <button onClick={handleOnBodyClick}>foxBody</button>
+          </div>
         </div>
-        <Canvas isHead={isHead} isBody={isBody} headXY={headXY} />
+        <Canvas />
       </div>
     </ContextProvider>
   );

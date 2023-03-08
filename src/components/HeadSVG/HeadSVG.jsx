@@ -1,9 +1,9 @@
 import React , {useContext, useEffect, useRef} from 'react'
-import { svgObj } from '../svg/svgLib';
+import { headLibObj } from '../svg/headLib';
 import { Context } from '../context/context';
 
 function HeadSVG() {
-    const {isHead, isBody, headXY , setHeadXY} = useContext(Context);
+    const {isHead, isBody, headXY , setHeadXY, bodyXY} = useContext(Context);
     const svgRef = useRef();
 
     function getXY() {
@@ -14,15 +14,29 @@ function HeadSVG() {
           const y1 = path.y1.baseVal.value;
           const y2 = path.y2.baseVal.value;
           const lineLength = y2 - y1;
+          const ratio = getRatio(lineLength);
           const headXYObj = {
             x1,
             x2,
             y1,
             y2,
-            lineLength
+            lineLength,
+            ratio
           };
           console.log(headXYObj);
           setHeadXY(headXYObj);
+        }
+
+        function getRatio(lineLength) {
+            if (bodyXY) {
+                let ratio;
+                if (lineLength < bodyXY.lineLength) {
+                    ratio = bodyXY.lineLength / lineLength
+                } else {
+                    ratio = lineLength / bodyXY.lineLength;
+                }
+                return ratio;
+            } else return;
         }
 
 
@@ -35,8 +49,13 @@ function HeadSVG() {
             {
                 border: 'solid 2px red',
                 position: 'absolute',
+                // transformOrigin: headXY && bodyXY ? `${headXY.x1}px ${headXY.y1}px` : 1,
+                // left: bodyXY && headXY ? `calc(50vw - 335px + ${bodyXY.x1})` : '0',
+                left: bodyXY && headXY ? `calc(50vw - 335px + ${bodyXY.x1}px - ${headXY.x1}px)` : '0',
+
+                // transform: 'scale(0.5)'
             }}
-            dangerouslySetInnerHTML={{ __html: svgObj.sheepHead }} />
+            dangerouslySetInnerHTML={{ __html: headLibObj[isHead] }} />
     )
 }
 
