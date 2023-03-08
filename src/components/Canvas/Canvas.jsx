@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { ReactSVG } from 'react-svg';
-import SingleSVG from '../SingleSVG/SingleSVG';
+import BodySVG from '../BodySVG/BodySVG';
 import svg from '../svg/sheepBody.svg';
-import SvgHead from '../SvgHead/SvgHead';
+import HeadSVG from '../HeadSVG/HeadSVG';
+import { Context } from '../context/context';
 
-function Canvas({ isHead, isBody , headLineXY}) {
-    const [headXY, setHeadXY] = useState('')
-
-    // useEffect(() => {
-    //   console.log(headLineXY);
-    // }, [])
+function Canvas() {
+    const {isHead, isBody, headXY , setHeadXY} = useContext(Context);
 
 
     return (
@@ -18,8 +15,8 @@ function Canvas({ isHead, isBody , headLineXY}) {
                 border: 'solid 2px green',
                 position: 'absolute'
             }}>
-            {isHead && <SvgHead isHead={isHead} />}
-            {isBody && <SingleSVG isBody={isBody} headLineXY={headLineXY} />}
+            {isHead && <HeadSVG/>}
+            {isBody && <BodySVG isBody={isBody} headLineXY={headXY} />}
         </div>
     )
 }
