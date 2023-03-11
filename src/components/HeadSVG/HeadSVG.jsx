@@ -1,61 +1,68 @@
-import React , {useContext, useEffect, useRef} from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { headLibObj } from '../svg/headLib';
 import { Context } from '../context/context';
 
 function HeadSVG() {
-    const {isHead, isBody, headXY , setHeadXY, bodyXY} = useContext(Context);
+    const { headURL, bodyURL, headXY, setHeadXY, bodyXY, counter } = useContext(Context);
     const svgRef = useRef();
+    const [vis , setVis] = useState('hidden')
 
     function getXY() {
-        console.log(svgRef.current.childNodes)
-          const path = svgRef.current.childNodes[1].childNodes[1].childNodes[3];
-          const x1 = path.x1.baseVal.value;
-          const x2 = path.x2.baseVal.value;
-          const y1 = path.y1.baseVal.value;
-          const y2 = path.y2.baseVal.value;
-          const lineLength = y2 - y1;
-          const ratio = getRatio(lineLength);
-          const headXYObj = {
+        const linePath = svgRef.current.querySelectorAll('line')[0];
+        const svgPath = svgRef.current.querySelectorAll('svg')[0];
+        const x1 = linePath.getAttribute('x1');
+        const x2 = linePath.getAttribute('x2');
+        const y1 = linePath.getAttribute('y1');
+        const y2 = linePath.getAttribute('y2');
+        const height = svgPath.getAttribute('height');
+        const lineLength = y2 - y1;
+        const ratio = getRatio(lineLength);
+        const headXYObj = {
             x1,
             x2,
             y1,
             y2,
             lineLength,
-            ratio
-          };
-          console.log(headXYObj);
-          setHeadXY(headXYObj);
-        }
+            ratio,
+            height
+        };
+        console.log(headXYObj);
+        setHeadXY(headXYObj);
+    }
 
-        function getRatio(lineLength) {
-            if (bodyXY) {
-                let ratio;
-                if (lineLength < bodyXY.lineLength) {
-                    ratio = bodyXY.lineLength / lineLength
-                } else {
-                    ratio = lineLength / bodyXY.lineLength;
-                }
-                return ratio;
-            } else return;
-        }
+    function getRatio(lineLength) {
+        let ratio;
+        if (bodyXY) {
+            if (lineLength > bodyXY.lineLength) {
+                ratio = bodyXY.lineLength / lineLength
+            } else {
+                ratio = lineLength / bodyXY.lineLength;
+            }
+            return ratio;
+        } else return;
+    }
 
 
     useEffect(() => {
         getXY();
+        setTimeout(() => {
+            setVis('visible');
+        }, 1);
     }, [])
 
     return (
         <div ref={svgRef} style={
             {
-                border: 'solid 2px red',
-                position: 'absolute',
-                // transformOrigin: headXY && bodyXY ? `${headXY.x1}px ${headXY.y1}px` : 1,
-                // left: bodyXY && headXY ? `calc(50vw - 335px + ${bodyXY.x1})` : '0',
-                left: bodyXY && headXY ? `calc(50vw - 335px + ${bodyXY.x1}px - ${headXY.x1}px)` : '0',
-
-                // transform: 'scale(0.5)'
+                // border: 'solid 1px red',
+                visibility: vis,
+                // position: 'relative',
+                // top: bodyXY && headXY ? `${bodyXY.y1 - headXY.y1}px` : '0',
+                // left: '2px',
+                // transformOrigin: headXY ? `${headXY.x1}px ${headXY.y1}px` : '0 0',
+                scale: bodyXY && headXY ? `${headXY.ratio}` : 1,
+                // scale: bodyXY && headXY ? `${bodyXY.ratio}` : 1,
             }}
-            dangerouslySetInnerHTML={{ __html: headLibObj[isHead] }} />
+            dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} />
     )
 }
 

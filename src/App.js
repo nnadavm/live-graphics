@@ -7,30 +7,47 @@ import { ContextProvider } from './components/context/context';
 
 
 function App() {
-  const [isHead, setIsHead] = useState(false);
-  const [isBody, setIsBody] = useState(false);
+  const [headURL, setHeadURL] = useState(null);
+  const [bodyURL, setBodyURL] = useState(null);
+  const [legsURL, setLegsURL] = useState(null);
   const [headXY, setHeadXY] = useState(null);
   const [bodyXY, setBodyXY] = useState(null);
+  const [legsXY, setLegsXY] = useState(null);
+  const [counter, setCounter] = useState(0);
 
   function handleOnHeadClick(e) {
-    setIsHead(e.target.innerText);
+    setHeadURL(e.target.innerText);
+    setCounter(counter + 1);
   }
 
   function handleOnBodyClick(e) {
-    setIsBody(e.target.innerText);
+    setBodyURL(e.target.innerText);
+    setCounter(counter + 1);
+  }
+
+  function handleOnLegsClick(e) {
+    setLegsURL(e.target.innerText);
+    setCounter(counter + 1);
   }
 
   return (
-    <ContextProvider value={{ isHead, isBody, headXY, setHeadXY, bodyXY, setBodyXY }}>
+    <ContextProvider value={{ headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter }}>
       <div className="App">
         <div className='d-flex justify-content-between'>
           <div>
             <button onClick={handleOnHeadClick}>sheepHead</button>
             <button onClick={handleOnHeadClick}>foxHead</button>
+            <button onClick={handleOnHeadClick}>pingHead</button>
+            <button onClick={handleOnHeadClick}>sharkHead</button>
           </div>
           <div>
             <button onClick={handleOnBodyClick}>sheepBody</button>
             <button onClick={handleOnBodyClick}>foxBody</button>
+            <button onClick={handleOnBodyClick}>pingBody</button>
+            <button onClick={handleOnBodyClick}>sharkBody</button>
+          </div>
+          <div>
+            <button onClick={handleOnLegsClick}>sheepLegs</button>
           </div>
         </div>
         <Canvas />
