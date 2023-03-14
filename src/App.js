@@ -13,25 +13,23 @@ function App() {
   const [headXY, setHeadXY] = useState(null);
   const [bodyXY, setBodyXY] = useState(null);
   const [legsXY, setLegsXY] = useState(null);
+  const [scaledSize, setScaledSize] = useState(null);
   const [counter, setCounter] = useState(0);
 
   function handleOnHeadClick(e) {
     setHeadURL(e.target.innerText);
-    setCounter(counter + 1);
   }
 
   function handleOnBodyClick(e) {
     setBodyURL(e.target.innerText);
-    setCounter(counter + 1);
   }
 
   function handleOnLegsClick(e) {
     setLegsURL(e.target.innerText);
-    setCounter(counter + 1);
   }
 
   return (
-    <ContextProvider value={{ headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter }}>
+    <ContextProvider value={{ headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize }}>
       <div className="App">
         <div className='d-flex justify-content-between'>
           <div>
@@ -48,6 +46,9 @@ function App() {
           </div>
           <div>
             <button onClick={handleOnLegsClick}>sheepLegs</button>
+            <button onClick={handleOnLegsClick}>foxLegs</button>
+            <button onClick={handleOnLegsClick}>sharkLegs</button>
+            <button onClick={handleOnLegsClick}>pingLegs</button>
           </div>
         </div>
         <Canvas />

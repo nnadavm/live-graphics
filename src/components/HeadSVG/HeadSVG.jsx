@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { headLibObj } from '../svg/headLib';
 import { Context } from '../context/context';
+import srcObj from '../svg/svgSrc';
+
 
 function HeadSVG() {
-    const { headURL, bodyURL, headXY, setHeadXY, bodyXY, counter } = useContext(Context);
+    const { headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize   } = useContext(Context);
     const svgRef = useRef();
-    const [vis , setVis] = useState('hidden')
 
     function getXY() {
         const linePath = svgRef.current.querySelectorAll('line')[0];
@@ -15,54 +16,50 @@ function HeadSVG() {
         const y1 = linePath.getAttribute('y1');
         const y2 = linePath.getAttribute('y2');
         const height = svgPath.getAttribute('height');
+        const width = svgPath.getAttribute('width');
+        const aspectRatio = width/height;
         const lineLength = y2 - y1;
-        const ratio = getRatio(lineLength);
         const headXYObj = {
             x1,
             x2,
             y1,
             y2,
+            height,
+            width,
+            aspectRatio,
             lineLength,
-            ratio,
-            height
         };
-        console.log(headXYObj);
+        console.log('headXY' , headXYObj);
         setHeadXY(headXYObj);
     }
 
-    function getRatio(lineLength) {
-        let ratio;
-        if (bodyXY) {
-            if (lineLength > bodyXY.lineLength) {
-                ratio = bodyXY.lineLength / lineLength
-            } else {
-                ratio = lineLength / bodyXY.lineLength;
-            }
-            return ratio;
-        } else return;
-    }
-
-
     useEffect(() => {
         getXY();
-        setTimeout(() => {
-            setVis('visible');
-        }, 1);
-    }, [])
+    }, [headURL])
 
     return (
-        <div ref={svgRef} style={
-            {
-                // border: 'solid 1px red',
-                visibility: vis,
-                // position: 'relative',
-                // top: bodyXY && headXY ? `${bodyXY.y1 - headXY.y1}px` : '0',
-                // left: '2px',
-                // transformOrigin: headXY ? `${headXY.x1}px ${headXY.y1}px` : '0 0',
-                scale: bodyXY && headXY ? `${headXY.ratio}` : 1,
-                // scale: bodyXY && headXY ? `${bodyXY.ratio}` : 1,
-            }}
-            dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} />
+        <>
+            <div ref={svgRef} style={
+                {
+                    display: 'none',
+                    // border: 'solid 1px red',
+                    // visibility: vis,
+                    // position: 'relative',
+                    // top: bodyXY && headXY ? `${bodyXY.y1 - headXY.y1}px` : '0',
+                    // left: '2px',
+                    // transformOrigin: headXY ? `${headXY.x1}px ${headXY.y1}px` : '0 0',
+                    scale: bodyXY && headXY ? `${headXY.ratio}` : 1,
+                    // scale: bodyXY && headXY ? `${bodyXY.ratio}` : 1,
+                }}
+                dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} />
+
+            {headURL && <img src={srcObj[headURL]} style={{
+                position: 'relative',
+                top: scaledSize ? `${scaledSize.offsetY}px` : 0,
+                maxWidth: bodyURL && scaledSize ? `${scaledSize.headFitWidth
+                }px` : '100%'
+            }} />}
+        </>
     )
 }
 
