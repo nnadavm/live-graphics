@@ -4,23 +4,23 @@ import { Context } from '../context/context';
 import srcObj from '../svg/svgSrc';
 
 function BodySVG() {
-    const { headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize  } = useContext(Context);
+    const { animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize  } = useContext(Context);
     const svgRef = useRef();
 
     function getXY() {
         const linePath = svgRef.current.querySelectorAll('line')[0];
         const svgPath = svgRef.current.querySelectorAll('svg')[0];
         const rect = svgRef.current.querySelectorAll('rect')[0];
-        const x1 = linePath.getAttribute('x1');
-        const x2 = linePath.getAttribute('x2');
-        const y1 = linePath.getAttribute('y1');
-        const y2 = linePath.getAttribute('y2');
-        const height = svgPath.getAttribute('height');
-        const width = svgPath.getAttribute('width');
-        const rectX = rect.getAttribute('x');
-        const rectY = rect.getAttribute('y');
-        const rectWidth = rect.getAttribute('width');
-        const rectHeight = rect.getAttribute('height');
+        const x1 = Number(linePath.getAttribute('x1'));
+        const x2 = Number(linePath.getAttribute('x2'));
+        const y1 = Number(linePath.getAttribute('y1'));
+        const y2 = Number(linePath.getAttribute('y2'));
+        const height = Number(svgPath.getAttribute('height'));
+        const width = Number(svgPath.getAttribute('width'));
+        const rectX = Number(rect.getAttribute('x'));
+        const rectY = Number(rect.getAttribute('y'));
+        const rectWidth = Number(rect.getAttribute('width'));
+        const rectHeight = Number(rect.getAttribute('height'));
         const aspectRatio = width/height;
         const lineLength = y2 - y1;
         const ratio = getRatio(lineLength);
@@ -58,7 +58,7 @@ function BodySVG() {
 
     useEffect(() => {
         getXY();
-    }, [bodyURL])
+    }, [animal])
 
     return (
         <>
@@ -73,15 +73,15 @@ function BodySVG() {
                     top: bodyXY ? '0' : '0',
                     scale: bodyXY ? `${bodyXY.ratio}` : 1
                 }}
-                dangerouslySetInnerHTML={{ __html: bodyLibObj[bodyURL] }} />
+                dangerouslySetInnerHTML={{ __html: bodyLibObj[animal.body] }} />
 
-                {bodyURL && <img src={srcObj[bodyURL]} style={{
-                    width: headURL && scaledSize ? `${scaledSize.bodyFitWidth
+                <img src={srcObj[animal.body]} style={{
+                    width: scaledSize ? `${scaledSize.bodyFitWidth
                     }px` : '100%',
                     maxHeight: '500px',
                     position: 'relative',
                     left: '-1px'
-                }} />}
+                }} />
         </>
     )
 }

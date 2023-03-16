@@ -10,22 +10,12 @@ import sheepBody from "../svg/sheepBody.svg"
 import sheep from "../svg/sheep.svg"
 
 function Canvas() {
-    const { headURL, setHeadURL, bodyURL, setBodyURL, legsURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
+    const { animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
     const [displayWidth, setDisplayWidth] = useState(500);
     const [headCounter, setHeadCounter] = useState(0)
 
-    function handleClear() {
-        setHeadURL(null);
-        setBodyURL(null);
-        setHeadXY(null);
-        setBodyXY(null);
-        setLegsURL(null);
-        setLegsXY(null);
-        setCounter(0);
-    }
-
-    function calcCombineHead() {
-        console.log('calcCombineHead')
+    function combineHead() {
+        console.log('combineHead')
         const ratio = bodyXY.lineLength / headXY.lineLength;
         const newHeadheight = headXY.height * ratio;
         const newHeadWidth = headXY.aspectRatio * newHeadheight;
@@ -48,96 +38,51 @@ function Canvas() {
         setScaledSize(res)
     }
 
-    function calcCombineLegs() {
-        console.log('calcCombineLegs')
-        const ratio = bodyXY.rectWidth > legsXY.lineLength ? legsXY.lineLength / bodyXY.rectWidth : bodyXY.rectWidth / legsXY.lineLength;
-        const bodyRatio = displayWidth / bodyXY.width;
-        // const newLegsWidth = bodyXY.rectWidth * bodyRatio;
-        const newLegsWidth = legsXY.lineLength * ratio;
-        const offsetX = bodyXY.rectX * ratio;
+    function combineLegs() {
+        const currentBodyRectWidth = bodyXY.rectWidth * scaledSize.fitRatio;
+        const legsRatio = legsXY.lineLength > currentBodyRectWidth ? currentBodyRectWidth / legsXY.lineLength : legsXY.lineLength / currentBodyRectWidth;
+        const newLegsWidth = legsXY.width > currentBodyRectWidth ? legsXY.width * legsRatio : legsXY.width / legsRatio ;
+        const offsetMargin = (legsXY.width - legsXY.x2) * legsRatio;
+        const offsetX = ((bodyXY.width - (bodyXY.rectX + bodyXY.rectWidth)) * scaledSize.fitRatio) - offsetMargin;
+        // const offsetX = (bodyXY.rectX * scaledSize.fitRatio) + scaledSize.headFitWidth - legsXY.x1;
         const res = {
             ...scaledSize,
-            newLegsWidth,
-            offsetX
+            currentBodyRectWidth,
+            offsetX,
+            newLegsWidth
         }
-
-        setScaledSize(res);
-    }
-
-    function calcCombineLegsWithHead() {
-        console.log('calcCombineLegsWithHead')
-        const scaledRectWidth = bodyXY.rectWidth * scaledSize.fitRatio;
-        const newLegsWidth = scaledRectWidth;
-        const offsetX = (bodyXY.rectX * scaledSize.fitRatio) + scaledSize.headFitWidth;
-        const res = {
-            ...scaledSize,
-            newLegsWidth,
-            offsetX
-        }
+        console.log(scaledSize.fitRatio);
         setScaledSize(res)
     }
 
-    function clearObj() {
-        setScaledSize({});
-    }
-
     useEffect(() => {
-        if (legsXY && !headXY) {
-            clearObj();
-            calcCombineLegs();
-        }
-        if (headXY && !legsXY) {
-            clearObj();
-            calcCombineHead()
-        }
-        if (legsXY && headXY) {
-            clearObj();
-            calcCombineHead()
-            calcCombineLegsWithHead();
+        if (bodyXY) {
+            combineHead();
         }
     }, [bodyXY])
 
     useEffect(() => {
-        if (bodyXY && !legsXY) {
-            calcCombineHead()
-        }
-        if (bodyXY && legsXY) {
-            calcCombineHead()
-        }
-    }, [headXY])
-
-    useEffect(() => {
-        if (bodyXY && legsXY) {
-            console.log('counter');
-            calcCombineLegsWithHead();
+        if (headXY) {
+            combineLegs();
         }
     }, [headCounter])
 
-    useEffect(() => {
-        if (bodyXY && !headXY) {
-            calcCombineLegs();
-        }
-        if (bodyXY && headXY) {
-            calcCombineLegsWithHead();
-        }
-    }, [legsXY])
-
     return (
         <>
-            <div className='d-flex flex-column justify-content-center align-items-center' onClick={handleClear} style={
-                {
+            <div className='d-flex flex-column justify-content-center align-items-center'
+                style={{
                     width: '100vw',
-                    height: '100vh',
+                    height: '80vh',
                 }}>
-                <div className='d-flex flex-column' style={{}}>
+                <div className='d-flex flex-column align-items-end'>
                     <div className='d-flex align-items-end' style={{
                         width: `${displayWidth}px`,
                         // border: 'solid 2px blue',
                     }}>
-                        {headURL && <HeadSVG />}
-                        {bodyURL && <BodySVG />}
+                        <HeadSVG />
+                        <BodySVG />
                     </div>
-                    {legsURL && <LegsComponent />}
+                    <LegsComponent />
                 </div>
             </div>
         </>
