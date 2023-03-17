@@ -12,6 +12,7 @@ function MyWheelPicker({ data, target }) {
   //     [bodyPart]: e.value
   //   });
   // }
+
   function handleOnChange(e, bodyPart) {
     const value = e.value;
     console.log(value);

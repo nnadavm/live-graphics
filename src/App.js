@@ -5,10 +5,11 @@ import Canvas from './components/Canvas/Canvas';
 import { svgObj } from './components/svg/headLib';
 import { ContextProvider } from './components/context/context';
 import MyWheelPicker from './components/WheelPicker/WheelPicker';
-import { bodyWheel , headWheel , legsWheel }from './components/WheelPicker/WheelData';
+import { bodyWheel, headWheel, legsWheel } from './components/WheelPicker/WheelData';
+import debounce from 'lodash.debounce';
 
 function App() {
-  const [animal , setAnimal] = useState({
+  const [animal, setAnimal] = useState({
     body: 'sheepBody',
     head: 'sheepHead',
     legs: 'sheepLegs'
@@ -22,20 +23,36 @@ function App() {
   const [scaledSize, setScaledSize] = useState(null);
   const [counter, setCounter] = useState(0);
 
-  function handleOnClick(e , bodyPart) {
+  function handleOnClick(e, bodyPart) {
     setAnimal({
       ...animal,
       [bodyPart]: e.target.innerText
     });
   }
 
+  // function handleOnChange(e, bodyPart) {
+  //   const value = e.value;
+  //   console.log(value);
+  //   // use debounce to create a debounced version of setAnimal
+  //   const debouncedSetAnimal = debounce(setAnimal, 500);
+  //   debouncedSetAnimal({
+  //     ...animal,
+  //     [bodyPart]: value
+  //   });
+  // }
+
+  useEffect(() => {
+  }, [])
+
+
   return (
-    <ContextProvider value={{ animal, setAnimal , headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize }}>
+    <ContextProvider value={{ animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize }}>
       <div className="App">
         <div className='d-flex justify-content-evenly'>
-          <MyWheelPicker style={{overflow: 'scroll'}} data={headWheel} target={'head'}/>
-          <MyWheelPicker data={bodyWheel} target={'body'}/>
-          <MyWheelPicker data={legsWheel} target={'legs'}/>
+          <MyWheelPicker data={headWheel} target={'head'} />
+          <MyWheelPicker data={bodyWheel} target={'body'} />
+          <MyWheelPicker data={legsWheel} target={'legs'} />
+          <button onClick={(e) => handleOnClick(e, 'head')}>sharkHead</button>
         </div>
         <Canvas />
       </div>

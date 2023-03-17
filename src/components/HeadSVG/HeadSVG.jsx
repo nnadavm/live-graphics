@@ -29,7 +29,7 @@ function HeadSVG() {
             aspectRatio,
             lineLength,
         };
-        console.log('headXY' , headXYObj);
+        // console.log('headXY' , headXYObj);
         setHeadXY(headXYObj);
     }
 

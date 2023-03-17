@@ -28,7 +28,7 @@ function LegsComponent() {
             aspectRatio,
             lineLength,
         };
-        console.log(legsXYObj);
+        // console.log(legsXYObj);
         setLegsXY(legsXYObj);
     }
 

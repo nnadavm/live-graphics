@@ -39,7 +39,7 @@ function BodySVG() {
             rectHeight,
             rectWidth
         };
-        console.log(bodyXYObj);
+        // console.log(bodyXYObj);
         setBodyXY(bodyXYObj);
     }
 

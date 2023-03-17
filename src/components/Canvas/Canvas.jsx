@@ -51,7 +51,6 @@ function Canvas() {
             offsetX,
             newLegsWidth
         }
-        console.log(scaledSize.fitRatio);
         setScaledSize(res)
     }
 
