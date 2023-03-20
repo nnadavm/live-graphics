@@ -5,19 +5,21 @@ import srcObj from '../svg/svgSrc';
 
 
 function HeadSVG() {
-    const { animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize   } = useContext(Context);
+    const { headURL, setHeadXY, scaledSize, setScaledSize, svgData } = useContext(Context);
     const svgRef = useRef();
 
     function getXY() {
+        // const doc = svgData.find(object => object.filename === headURL);
+        // const linePath = doc.doc.querySelectorAll('line')[0];
         const linePath = svgRef.current.querySelectorAll('line')[0];
         const svgPath = svgRef.current.querySelectorAll('svg')[0];
-        const x1 = linePath.getAttribute('x1');
-        const x2 = linePath.getAttribute('x2');
-        const y1 = linePath.getAttribute('y1');
-        const y2 = linePath.getAttribute('y2');
-        const height = svgPath.getAttribute('height');
-        const width = svgPath.getAttribute('width');
-        const aspectRatio = width/height;
+        const x1 = Number(linePath.getAttribute('x1'));
+        const x2 = Number(linePath.getAttribute('x2'));
+        const y1 = Number(linePath.getAttribute('y1'));
+        const y2 = Number(linePath.getAttribute('y2'));
+        const height = Number(svgPath.getAttribute('height'));
+        const width = Number(svgPath.getAttribute('width'));
+        const aspectRatio = width / height;
         const lineLength = y2 - y1;
         const headXYObj = {
             x1,
@@ -35,22 +37,17 @@ function HeadSVG() {
 
     useEffect(() => {
         getXY();
-    }, [animal])
+    }, [headURL])
 
     return (
         <>
-            <div ref={svgRef} style={
-                {
-                    display: 'none',
-                    scale: bodyXY && headXY ? `${headXY.ratio}` : 1,
-                }}
-                dangerouslySetInnerHTML={{ __html: headLibObj[animal.head] }} />
+            <div ref={svgRef} style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} />
 
-            <img src={srcObj[animal.head]} style={{
+            <img src={srcObj[headURL]} style={{
                 position: 'relative',
                 top: scaledSize ? `${scaledSize.offsetY}px` : 0,
                 maxWidth: scaledSize ? `${scaledSize.headFitWidth
-                }px` : '100%',
+                    }px` : '100%',
                 // border: 'solid 2px orange'
             }} />
         </>

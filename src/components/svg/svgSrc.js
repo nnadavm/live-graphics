@@ -11,6 +11,8 @@ import foxLegsSrc from '../svg/foxLegs.svg'
 import sharkLegsSrc from '../svg/sharkLegs.svg'
 import pingLegsSrc from '../svg/pingLegs.svg'
 
+
+
 const srcObj= {
     sheepBody: sheepBodySrc,
     sheepHead: sheepHeadSrc,

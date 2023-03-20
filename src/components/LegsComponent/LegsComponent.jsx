@@ -4,7 +4,7 @@ import { Context } from '../context/context';
 import srcObj from '../svg/svgSrc';
 
 function LegsComponent() {
-    const { animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
+    const { headURL, bodyURL, legsURL, setHeadURL, setBodyURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
     const svgRef = useRef();
 
     function getXY() {
@@ -34,14 +34,13 @@ function LegsComponent() {
 
     useEffect(() => {
         getXY();
-    }, [animal])
+    }, [legsURL])
 
     return (
         <>
-            <div ref={svgRef} style={{ display: 'none', }}
-                dangerouslySetInnerHTML={{ __html: legsLibObj[animal.legs] }} />
+            <div ref={svgRef} style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: legsLibObj[legsURL] }} />
 
-            <img src={srcObj[animal.legs]}
+            <img src={srcObj[legsURL]}
                 style={{
                     width: scaledSize ? `${scaledSize.newLegsWidth
                         }px` : '10%',

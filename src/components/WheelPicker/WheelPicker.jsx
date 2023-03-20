@@ -4,7 +4,7 @@ import WheelPicker from 'react-simple-wheel-picker';
 import debounce from 'lodash.debounce';
 
 function MyWheelPicker({ data, target }) {
-  const { animal, setAnimal } = useContext(Context);
+  const { headURL, bodyURL, legsURL, setHeadURL, setBodyURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
 
   // function handleOnChange(e, bodyPart) {
   //   setAnimal({
@@ -15,13 +15,19 @@ function MyWheelPicker({ data, target }) {
 
   function handleOnChange(e, bodyPart) {
     const value = e.value;
-    console.log(value);
+    // console.log(value);
+    let cb;
+    if (bodyPart==='head') cb = setHeadURL;
+    if (bodyPart==='body') cb = setBodyURL;
+    if (bodyPart==='legs') cb = setLegsURL;
     // use debounce to create a debounced version of setAnimal
-    const debouncedSetAnimal = debounce(setAnimal, 500);
-    debouncedSetAnimal({
-      ...animal,
-      [bodyPart]: value
-    });
+    const debouncedSetAnimal = debounce(testFunc, 300);
+    debouncedSetAnimal(cb, value);
+  }
+
+  function testFunc(cb, value) {
+    // console.log('debouncer >' , value);
+    cb(value);
   }
 
   return (
@@ -38,7 +44,6 @@ function MyWheelPicker({ data, target }) {
       backgroundColor="#fff"
       shadowColor='false'
       fontSize='18px'
-
     />
   )
 }

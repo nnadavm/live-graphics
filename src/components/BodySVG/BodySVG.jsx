@@ -4,7 +4,7 @@ import { Context } from '../context/context';
 import srcObj from '../svg/svgSrc';
 
 function BodySVG() {
-    const { animal, setAnimal, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize , setScaledSize  } = useContext(Context);
+    const { headURL, bodyURL, legsURL, setHeadURL, setBodyURL, setLegsURL, headXY, setHeadXY, bodyXY, setBodyXY, legsXY, setLegsXY, counter, setCounter, scaledSize, setScaledSize } = useContext(Context);
     const svgRef = useRef();
 
     function getXY() {
@@ -58,24 +58,13 @@ function BodySVG() {
 
     useEffect(() => {
         getXY();
-    }, [animal])
+    }, [bodyURL])
 
     return (
         <>
-            <div ref={svgRef} style={
-                {
-                    display: 'none',
-                    border: 'solid 1px green',
-                    position: 'absolute',
-                    transformOrigin: bodyXY ? `${bodyXY.x1}px ${bodyXY.y1}px` : 'center',
-                    transform: 'scale(0.5)',
-                    left: bodyXY ? 'calc(50vw - 335px)' : 'calc(50vw - 335px)',
-                    top: bodyXY ? '0' : '0',
-                    scale: bodyXY ? `${bodyXY.ratio}` : 1
-                }}
-                dangerouslySetInnerHTML={{ __html: bodyLibObj[animal.body] }} />
+            <div ref={svgRef} style={{display: 'none'}} dangerouslySetInnerHTML={{ __html: bodyLibObj[bodyURL] }} />
 
-                <img src={srcObj[animal.body]} style={{
+                <img src={srcObj[bodyURL]} style={{
                     width: scaledSize ? `${scaledSize.bodyFitWidth
                     }px` : '100%',
                     maxHeight: '500px',
