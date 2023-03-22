@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { headLibObj } from '../svg/headLib';
+// import { headLibObj } from '../svg/headLib';
 import { Context } from '../context/context';
-import srcObj from '../svg/svgSrc';
+// import srcObj from '../svg/svgSrc';
 
 
 function HeadSVG() {
@@ -9,10 +9,9 @@ function HeadSVG() {
     const svgRef = useRef();
 
     function getXY() {
-        // const doc = svgData.find(object => object.filename === headURL);
-        // const linePath = doc.doc.querySelectorAll('line')[0];
-        const linePath = svgRef.current.querySelectorAll('line')[0];
-        const svgPath = svgRef.current.querySelectorAll('svg')[0];
+        const doc = svgData[0][headURL].doc;
+        const linePath = doc.querySelectorAll('line')[0];
+        const svgPath = doc.querySelectorAll('svg')[0];
         const x1 = Number(linePath.getAttribute('x1'));
         const x2 = Number(linePath.getAttribute('x2'));
         const y1 = Number(linePath.getAttribute('y1'));
@@ -31,7 +30,7 @@ function HeadSVG() {
             aspectRatio,
             lineLength,
         };
-        // console.log('headXY' , headXYObj);
+        console.log('headXY' , headXYObj);
         setHeadXY(headXYObj);
     }
 
@@ -41,14 +40,14 @@ function HeadSVG() {
 
     return (
         <>
-            <div ref={svgRef} style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} />
+            {/* <div ref={svgRef} style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: headLibObj[headURL] }} /> */}
 
-            <img src={srcObj[headURL]} style={{
+            <img src={svgData[0][headURL].url} style={{
                 position: 'relative',
                 top: scaledSize ? `${scaledSize.offsetY}px` : 0,
-                maxWidth: scaledSize ? `${scaledSize.headFitWidth
+                width: scaledSize ? `${scaledSize.headFitWidth
                     }px` : '100%',
-                // border: 'solid 2px orange'
+                // border: 'solid 1px orange'
             }} />
         </>
     )
